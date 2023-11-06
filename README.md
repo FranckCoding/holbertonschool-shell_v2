@@ -1,4 +1,4 @@
-# Simple Shell
+# Shell V2
 
 ## General
 
