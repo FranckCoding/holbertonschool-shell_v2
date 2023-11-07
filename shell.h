@@ -1,5 +1,5 @@
-#ifndef SIMPLE_SHELL_H
-#define SIMPLE_SHELL_H
+#ifndef SHELL_H
+#define SHELL_H
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <signal.h>
 
 extern char **environ;
 
