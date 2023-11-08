@@ -61,6 +61,8 @@ void exit_procedure(char *buffer, path_t *path, env_t *env, int status)
 	free_linked_env(env);
 	free_linked_path(path);
 	free(buffer);
+	if (status < 0)
+		status = -status;
 	exit(status);
 }
 
