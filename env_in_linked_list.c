@@ -1,4 +1,4 @@
-#include "simple_shell.h"
+#include "shell.h"
 
 /**
  * add_env_node - add a new node in the linked list env

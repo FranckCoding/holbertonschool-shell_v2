@@ -1,4 +1,4 @@
-#include "simple_shell.h"
+#include "shell.h"
 
 /**
  * _realloc - Function that reallocates a memory block using malloc and free
