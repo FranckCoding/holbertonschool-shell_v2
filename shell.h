@@ -9,6 +9,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <signal.h>
+#include <errno.h>
 
 extern char **environ;
 

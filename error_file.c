@@ -1,41 +1,30 @@
 #include "shell.h"
 
 /**
- * error_file - handle error
+ * error_file - handle error when file cannot be found or
+ * if the file name is too long or the user haven't the permission to
+ * open the file
  *
- * @chaine: user's chain
- * @i: count
- * @argv: Argument value passes at the beginning
- * @nerr: The number of the error that occurs
+ * @chaine: Arguments passes by the user, that occur an error
+ * @i: The iteration number of program's infinite loop
+ * @argv: Argument value passes at the launch of the program to catch program
+ * name
+ * @nerr: The number of the error occured:
+ * 0 for file not found
+ * 1 for File name too long
+ * 2 for Permission denied
  *
- * Return: 127
+ * Return: EKEYEXPIRED
  */
 int error_file(char *chaine, int i, char *argv[], int nerr)
 {
-	int length;
-	char *number, *str;
 	char *merr[3] = {	": not found\n",
 						": File name too long\n",
 						": Permission denied\n"};
 
-	number = int_to_string(i);
-	length = _strlen(argv[0]) + _strlen(chaine) + _strlen(number);
-	length +=  _strlen(merr[nerr]) + 4;
-	str = malloc(sizeof(char) * length + 1);
-	*str = '\0';
-	str = _strcat(str, argv[0]);
-	str = _strcat(str, ": ");
-	str = _strcat(str, number);
-	str = _strcat(str, ": ");
-	str = _strcat(str, chaine);
-	str = _strcat(str, merr[nerr]);
-	str[length] = '\0';
+	fprintf(stderr, "%s: %d: %s%s", argv[0], i, chaine, merr[nerr]);
 
-	write(STDERR_FILENO, str, length);
-
-	free(number);
-	free(str);
-	return (127);
+	return (-EKEYEXPIRED);
 }
 
 /**
