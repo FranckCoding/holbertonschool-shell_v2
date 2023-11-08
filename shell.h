@@ -9,6 +9,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <signal.h>
+#include <errno.h>
 
 extern char **environ;
 
@@ -81,7 +82,6 @@ env_t *allocate_node_env(char *name, char *value, env_t *next);
 env_t *add_env_node(env_t *head, char *name, char *value);
 
 void exit_procedure(char *buffer, path_t *path, env_t *env, int status);
-char *int_to_string(int i);
 void sigint_handle(__attribute__((unused))int i);
 
 #endif
