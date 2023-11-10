@@ -42,6 +42,29 @@ typedef struct linked_env
 
 } env_t;
 
+/**
+ * struct shell_data - All the data for shell
+ *
+ * @loopCount: The count of the shell loop
+ * @path: The linked list of the Path
+ * @env: The linked list of the env
+ * @buffer: Buffer where the arguments passes by the user is stored
+ * @args: Array of String of arguments passes by the user
+ * @status: The last status of the program when error is occur
+ * @argv: All arguments passes at the launch of the program
+*/
+typedef struct shell_data
+{
+	int loopCount;
+	path_t *path;
+	env_t *env;
+	char *buffer;
+	char **args;
+	int status;
+	char **argv;
+} shellData;
+
+
 int _strlen(char *s);
 char **strtow(char *str, char sep);
 int strwlen(char *s);
@@ -59,10 +82,10 @@ path_t *create_linked_lp(char *the_path);
 void free_node(path_t *head);
 
 void _prompt(void);
-char *_getline(path_t *path, env_t *env, int status);
-void loop_asking(int i, char *argv[], env_t *env, path_t *path);
-int _execute(char *cmd, char **sep, char **argv, int i);
-int error_file(char *chaine, int i, char *argv[], int nerr);
+char *_getline(shellData *datas);
+void loop_asking(shellData *datas);
+int _execute(char *cmd, shellData *datas);
+int error_file(shellData *datas, int nerr);
 
 path_t *add_path_node(path_t *head, char *value);
 path_t *allocate_node(char *value, path_t *next);
@@ -72,7 +95,7 @@ void free_linked_path(path_t *head);
 path_t *create_path_variable(env_t *env);
 void last_c_linked_path(path_t *path);
 char *_strcat(char *dest, char *src);
-int test_with_path(path_t *path, char **sep, char **argv, int i);
+int test_with_path(shellData *datas);
 char *_strdup(char *str);
 
 int _printenv(env_t *env, char **sep);
@@ -81,7 +104,7 @@ void free_linked_env(env_t *head);
 env_t *allocate_node_env(char *name, char *value, env_t *next);
 env_t *add_env_node(env_t *head, char *name, char *value);
 
-void exit_procedure(char *buffer, path_t *path, env_t *env, int status);
+void exit_procedure(shellData *datas);
 void sigint_handle(__attribute__((unused))int i);
 
 #endif
