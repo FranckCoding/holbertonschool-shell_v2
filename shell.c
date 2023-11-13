@@ -53,7 +53,7 @@ void loop_asking(shellData *datas)
 
 		_prompt();
 		signal(SIGINT, sigint_handle);
-		_getline(datas);
+		datas->buffer = _getline(datas);
 
 		datas->args = separate_av(datas->buffer, " \t\n\v\r\f");
 		if (datas->args != NULL && _strlen(datas->args[0]) > 255)
