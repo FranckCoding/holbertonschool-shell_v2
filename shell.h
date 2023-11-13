@@ -65,6 +65,11 @@ typedef struct shell_data
 } shellData;
 
 
+/* Functions in shell.c */
+void loop_asking(shellData *datas);
+int _execute(char *cmd, shellData *datas);
+shellData *_shellDataInitialisation(char *argv[]);
+
 int _strlen(char *s);
 char **strtow(char *str, char sep);
 int strwlen(char *s);
@@ -83,8 +88,7 @@ void free_node(path_t *head);
 
 void _prompt(void);
 char *_getline(shellData *datas);
-void loop_asking(shellData *datas);
-int _execute(char *cmd, shellData *datas);
+
 int error_file(shellData *datas, int nerr);
 
 path_t *add_path_node(path_t *head, char *value);

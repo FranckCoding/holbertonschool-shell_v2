@@ -1,31 +1,40 @@
 #include "shell.h"
 
 /**
- * main - The main function for simple shell
+ * _chooseExecProcess - Test the commands passes by the user to execute
+ * the correct command
  *
- * @argc: Count of the arguments passes
- * @argv: Arguments value with the name of the executable
- *
- * Return: 0 if is a success
- */
-int main(__attribute__((unused)) int argc, char *argv[])
+ * @datas: The pointer with all datas of the shell
+ * @size_test: Test if the size of the arguments passes is not over 255 char
+*/
+void _chooseExecProcess(shellData *datas, int size_test)
 {
-	shellData *datas = NULL;
+	int path_exec = 1, env_exec = 1;
+	struct stat st;
 
-	datas = malloc(sizeof(shellData));
-	if (!datas)
-		return (1);
+	if (datas->buffer != NULL && datas->args != NULL && size_test == 0)
+	{
+		if ((datas->args[0][0] == '.' && datas->args[0][1] != '\0')
+			|| datas->args[0][0] != '.')
+		{
+			if ((_strcmp(datas->args[0], "env") == 0 ||
+				_strcmp(datas->args[0], "printenv") == 0))
+				env_exec = _printenv(datas->env, datas->args);
 
-	datas->env = create_env_variable();
-	datas->path = create_path_variable(datas->env);
-	datas->loopCount = 0;
-	datas->argv = argv;
-	datas->buffer = "";
-	datas->status = 0;
+			if (datas->args[0][0] != '.' && env_exec != 0)
+				path_exec = test_with_path(datas);
 
-	loop_asking(datas);
+			if (_strcmp(datas->args[0], "exit") == 0)
+				exit_procedure(datas);
 
-	return (0);
+			if (datas->buffer != NULL && path_exec == 1
+				&& stat(datas->args[0], &st) == 0)
+				datas->status = _execute(datas->args[0], datas);
+
+			else if (datas->buffer != NULL && path_exec == 1 && env_exec == 1)
+				datas->status = error_file(datas, 0);
+		}
+	}
 }
 
 /**
@@ -37,44 +46,27 @@ int main(__attribute__((unused)) int argc, char *argv[])
  */
 void loop_asking(shellData *datas)
 {
-	int path_exec, env_exec, size_test = 0;
-	struct stat st;
+	int size_test = 0;
 
 	do {
 		datas->loopCount++;
-		path_exec = 1;
-		env_exec = 1;
+
 		_prompt();
 		signal(SIGINT, sigint_handle);
 		_getline(datas);
+
 		datas->args = separate_av(datas->buffer, " \t\n\v\r\f");
 		if (datas->args != NULL && _strlen(datas->args[0]) > 255)
 		{
 			datas->status = error_file(datas, 1);
 			size_test = 1;
 		}
-		if (datas->buffer != NULL && datas->args != NULL && size_test == 0)
-			if ((datas->args[0][0] == '.' && datas->args[0][1] != '\0')
-				|| datas->args[0][0] != '.')
-			{
-				if ((_strcmp(datas->args[0], "env") == 0 ||
-					_strcmp(datas->args[0], "printenv") == 0))
-					env_exec = _printenv(datas->env, datas->args);
-				if (datas->args[0][0] != '.' && env_exec != 0)
-					path_exec = test_with_path(datas);
-				if (_strcmp(datas->args[0], "exit") == 0)
-				{
-					free_separate_av(datas->args);
-					exit_procedure(datas);
-				}
-				if (datas->buffer != NULL && path_exec == 1
-					&& stat(datas->args[0], &st) == 0)
-					datas->status = _execute(datas->args[0], datas);
-				else if (datas->buffer != NULL && path_exec == 1 && env_exec == 1)
-					datas->status = error_file(datas, 0);
-			}
+
+		_chooseExecProcess(datas, size_test);
+
 		if (datas->args != NULL)
 			free_separate_av(datas->args);
+
 		free(datas->buffer);
 		size_test = 0;
 	} while (1);
@@ -118,4 +110,43 @@ int _execute(char *cmd, shellData *datas)
 		status = 2;
 
 	return (status);
+}
+
+shellData *_shellDataInitialisation(char *argv[])
+{
+	shellData *datas = NULL;
+
+	datas = malloc(sizeof(shellData));
+	if (!datas)
+		return (NULL);
+
+	datas->env = create_env_variable();
+	datas->path = create_path_variable(datas->env);
+	datas->loopCount = 0;
+	datas->argv = argv;
+	datas->buffer = "";
+	datas->status = 0;
+
+	return (datas);
+}
+
+/**
+ * main - The main function for simple shell
+ *
+ * @argc: Count of the arguments passes
+ * @argv: Arguments value with the name of the executable
+ *
+ * Return: 0 if is a success
+ */
+int main(__attribute__((unused)) int argc, char *argv[])
+{
+	shellData *datas = NULL;
+
+	datas = _shellDataInitialisation(argv);
+	if (!datas)
+		return (1);
+
+	loop_asking(datas);
+
+	return (0);
 }

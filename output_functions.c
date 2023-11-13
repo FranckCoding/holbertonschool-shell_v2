@@ -61,9 +61,14 @@ void exit_procedure(shellData *datas)
 
 	if (datas->buffer != NULL)
 		free(datas->buffer);
+
+	if (datas->args != NULL)
+		free_separate_av(datas->args);
+
 	free_linked_env(datas->env);
 	free_linked_path(datas->path);
 	free(datas);
+
 	exit(status);
 }
 
