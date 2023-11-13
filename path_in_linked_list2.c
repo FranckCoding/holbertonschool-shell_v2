@@ -71,16 +71,17 @@ int test_with_path(shellData *shellData)
 	char *tmp_value, *tmp_buffer;
 	int loop = 0;
 	struct stat st;
+	path_t *path = shellData->path;
 
-	while (shellData->path != NULL)
+	while (path != NULL)
 	{
-		lenValue = _strlen(shellData->path->value);
+		lenValue = _strlen(path->value);
 		tmp_buffer = malloc(sizeof(char) * (256 + lenValue + 1));
 		*tmp_buffer = '\0';
 
-		if (shellData->path->value[lenValue - 1] != '/')
+		if (path->value[lenValue - 1] != '/')
 		{
-			tmp_value = _strdup(shellData->path->value);
+			tmp_value = _strdup(path->value);
 			tmp_buffer = _strcat(tmp_buffer, tmp_value);
 			tmp_buffer[lenValue] = '/';
 			while (shellData->args[0][loop] != '\0')
@@ -101,7 +102,7 @@ int test_with_path(shellData *shellData)
 
 		free(tmp_value);
 		free(tmp_buffer);
-		shellData->path = shellData->path->next;
+		path = path->next;
 		loop = 0;
 	}
 	return (1);
