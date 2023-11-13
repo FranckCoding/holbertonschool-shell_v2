@@ -24,6 +24,7 @@ char *_getline(shellData *datas)
 	char *buffer;
 
 	buffer = _calloc(sizeof(char), size);
+	datas->buffer = buffer;
 
 	charactersGet = getline(&buffer, &size, stdin);
 

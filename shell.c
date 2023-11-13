@@ -46,7 +46,7 @@ void loop_asking(shellData *datas)
 		env_exec = 1;
 		_prompt();
 		signal(SIGINT, sigint_handle);
-		datas->buffer = _getline(datas);
+		_getline(datas);
 		datas->args = separate_av(datas->buffer, " \t\n\v\r\f");
 		if (datas->args != NULL && _strlen(datas->args[0]) > 255)
 		{
