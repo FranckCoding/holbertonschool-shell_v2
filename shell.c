@@ -65,9 +65,13 @@ void loop_asking(shellData *datas)
 		_chooseExecProcess(datas, size_test);
 
 		if (datas->args != NULL)
+		{
 			free_separate_av(datas->args);
+			datas->args = NULL;
+		}
 
 		free(datas->buffer);
+		datas->buffer = NULL;
 		size_test = 0;
 	} while (1);
 }
@@ -124,7 +128,8 @@ shellData *_shellDataInitialisation(char *argv[])
 	datas->path = create_path_variable(datas->env);
 	datas->loopCount = 0;
 	datas->argv = argv;
-	datas->buffer = "";
+	datas->buffer = NULL;
+	datas->args = NULL;
 	datas->status = 0;
 
 	return (datas);

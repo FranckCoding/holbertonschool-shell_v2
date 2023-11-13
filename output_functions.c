@@ -31,6 +31,7 @@ char *_getline(shellData *datas)
 	{
 		if (isatty(0) == 1)
 			_putchar('\n');
+		free(buffer);
 		exit_procedure(datas);
 	}
 
