@@ -5,10 +5,7 @@
  * if the file name is too long or the user haven't the permission to
  * open the file
  *
- * @chaine: Arguments passes by the user, that occur an error
- * @i: The iteration number of program's infinite loop
- * @argv: Argument value passes at the launch of the program to catch program
- * name
+ * @shellData: Structure with all data of the shell
  * @nerr: The number of the error occured:
  * 0 for file not found
  * 1 for File name too long
@@ -16,13 +13,14 @@
  *
  * Return: EKEYEXPIRED
  */
-int error_file(char *chaine, int i, char *argv[], int nerr)
+int error_file(shellData *shellData, int nerr)
 {
 	char *merr[3] = {	": not found\n",
 						": File name too long\n",
 						": Permission denied\n"};
 
-	fprintf(stderr, "%s: %d: %s%s", argv[0], i, chaine, merr[nerr]);
+	fprintf(stderr, "%s: %d: %s%s", shellData->argv[0], shellData->loopCount,
+			 shellData->args[0], merr[nerr]);
 
 	return (-EKEYEXPIRED);
 }

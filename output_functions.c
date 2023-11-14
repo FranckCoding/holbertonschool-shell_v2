@@ -13,13 +13,11 @@ void _prompt(void)
 /**
  * _getline - Ask to the user what command he want
  *
- * @path: The linked list path, if EOF or exit, it's free
- * @env: The linked list of all environment variable
- * @status: The status of the execute
+ * @datas: The pointer with all data of Shell
  *
  * Return: Buffer, or NULL if EOF or exit
  */
-char *_getline(path_t *path, env_t *env, int status)
+char *_getline(shellData *datas)
 {
 	size_t size = 256;
 	ssize_t charactersGet;
@@ -33,7 +31,8 @@ char *_getline(path_t *path, env_t *env, int status)
 	{
 		if (isatty(0) == 1)
 			_putchar('\n');
-		exit_procedure(buffer, path, env, status);
+		free(buffer);
+		exit_procedure(datas);
 	}
 
 	buffer[charactersGet - 1] = '\0';
@@ -51,18 +50,25 @@ char *_getline(path_t *path, env_t *env, int status)
 /**
  * exit_procedure - Free all variable when EOF or exit
  *
- * @buffer: The buffer of getline
- * @path: The linked list path
- * @env: The linked list of all environment variable
- * @status: The status for exit
+ * @datas: The pointer with all the data of the shell
  */
-void exit_procedure(char *buffer, path_t *path, env_t *env, int status)
+void exit_procedure(shellData *datas)
 {
-	free_linked_env(env);
-	free_linked_path(path);
-	free(buffer);
+	int status = datas->status;
+
 	if (status < 0)
 		status = -status;
+
+	if (datas->buffer != NULL)
+		free(datas->buffer);
+
+	if (datas->args != NULL)
+		free_separate_av(datas->args);
+
+	free_linked_env(datas->env);
+	free_linked_path(datas->path);
+	free(datas);
+
 	exit(status);
 }
 
