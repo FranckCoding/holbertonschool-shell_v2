@@ -120,7 +120,7 @@ shellData *_shellDataInitialisation(char *argv[])
 {
 	shellData *datas = NULL;
 
-	datas = malloc(sizeof(shellData));
+	datas = (shellData *)malloc(sizeof(shellData));
 	if (!datas)
 		return (NULL);
 

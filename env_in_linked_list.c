@@ -39,7 +39,7 @@ env_t *allocate_node_env(char *name, char *value, env_t *next)
 {
 	env_t *new;
 
-	new = malloc(sizeof(env_t));
+	new = (env_t *)malloc(sizeof(env_t));
 
 	if (new == NULL)
 		return (NULL);

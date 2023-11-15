@@ -15,7 +15,7 @@ char **separate_path(char *str)
 	length = count_word(str, ":");
 	y = strtok(str, ":");
 
-	j = malloc(sizeof(char *) * (length + 1));
+	j = (char **)malloc(sizeof(char *) * (length + 1));
 	j[length] = NULL;
 
 	while (y != NULL)
@@ -76,7 +76,7 @@ int test_with_path(shellData *shellData)
 	while (path != NULL)
 	{
 		lenValue = _strlen(path->value);
-		tmp_buffer = malloc(sizeof(char) * (256 + lenValue + 1));
+		tmp_buffer = (char *)malloc(sizeof(char) * (256 + lenValue + 1));
 		*tmp_buffer = '\0';
 
 		if (path->value[lenValue - 1] != '/')
