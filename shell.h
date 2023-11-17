@@ -68,6 +68,18 @@ typedef struct shell_data
 	char **argv;
 } shellData;
 
+/**
+ * struct built_in_function_pointer - Structure for a pointer function
+ * to choose the correct built-in function that the user wants
+ *
+ * @command: The command to test with strcmp
+ * @function: The pointer of function with the adress of the correct function
+*/
+typedef struct built_in_function_pointer
+{
+	char *command;
+	void (*function)(shellData *datas);
+} builtIn;
 
 /* Functions in shell.c */
 void loop_asking(shellData *datas);

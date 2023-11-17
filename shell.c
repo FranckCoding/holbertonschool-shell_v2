@@ -9,7 +9,14 @@
 */
 void _chooseExecProcess(shellData *datas, int size_test)
 {
+	builtIn builtFunction[] = {
+							{"env", _printenv},
+							{"printenv", _printenv},
+							{"exit", exit_procedure},
+							{NULL, NULL}
+	};
 	struct stat st;
+	int indexBuilt = 0;
 
 	datas->envExecuted = 0;
 	datas->pathExecuted = 0;
@@ -19,12 +26,12 @@ void _chooseExecProcess(shellData *datas, int size_test)
 		if ((datas->args[0][0] == '.' && datas->args[0][1] != '\0')
 			|| datas->args[0][0] != '.')
 		{
-			if ((_strcmp(datas->args[0], "env") == 0 ||
-				_strcmp(datas->args[0], "printenv") == 0))
-				_printenv(datas);
-
-			if (_strcmp(datas->args[0], "exit") == 0)
-				exit_procedure(datas);
+			while (builtFunction[indexBuilt].command)
+			{
+				if (_strcmp(builtFunction[indexBuilt].command, datas->args[0]) == 0)
+					builtFunction[indexBuilt].function(datas);
+				indexBuilt++;
+			}
 
 			if (datas->args[0][0] != '.' && datas->envExecuted != 1)
 				test_with_path(datas);
