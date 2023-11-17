@@ -61,17 +61,17 @@ path_t *create_path_variable(env_t *env)
 /**
  * test_with_path - Test if an command exist in one path of path
  *
- * @shellData: The data structure with all data of the shell
+ * @datas: The data structure with all data of the shell
  *
  * Return: buffer if no command exist in path, otherwise path + command
  */
-int test_with_path(shellData *shellData)
+void test_with_path(shellData *datas)
 {
 	int lenValue;
 	char *tmp_value, *tmp_buffer;
 	int loop = 0;
 	struct stat st;
-	path_t *path = shellData->path;
+	path_t *path = datas->path;
 
 	while (path != NULL)
 	{
@@ -84,20 +84,21 @@ int test_with_path(shellData *shellData)
 			tmp_value = _strdup(path->value);
 			tmp_buffer = _strcat(tmp_buffer, tmp_value);
 			tmp_buffer[lenValue] = '/';
-			while (shellData->args[0][loop] != '\0')
+			while (datas->args[0][loop] != '\0')
 			{
-				tmp_buffer[lenValue + 1 + loop] = shellData->args[0][loop];
+				tmp_buffer[lenValue + 1 + loop] = datas->args[0][loop];
 				loop++;
 			}
 			tmp_buffer[lenValue + 1 + loop] = '\0';
 		}
 
-		if (_strcmp(shellData->args[0], "..") != 0 && stat(tmp_buffer, &st) == 0)
+		if (_strcmp(datas->args[0], "..") != 0 && stat(tmp_buffer, &st) == 0)
 		{
 			free(tmp_value);
-			_execute(tmp_buffer, shellData);
+			_execute(tmp_buffer, datas);
 			free(tmp_buffer);
-			return (0);
+			datas->pathExecuted = 1;
+			return;
 		}
 
 		free(tmp_value);
@@ -105,5 +106,4 @@ int test_with_path(shellData *shellData)
 		path = path->next;
 		loop = 0;
 	}
-	return (1);
 }

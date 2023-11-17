@@ -75,13 +75,12 @@ void exit_procedure(shellData *datas)
 /**
  * _printenv - Print all environment variables
  *
- * @env: Linked list of all environment variables
- * @sep: All options for printenv
+ * @datas:The pointer with all the data of the shell
  *
- * Return: 0
  */
-int _printenv(env_t *env, __attribute__((unused))char **sep)
+void _printenv(shellData *datas)
 {
+	env_t *env = datas->env;
 
 	while (env != NULL)
 	{
@@ -96,7 +95,7 @@ int _printenv(env_t *env, __attribute__((unused))char **sep)
 		env = env->next;
 	}
 
-	return (0);
+	datas->envExecuted = 1;
 }
 
 /**

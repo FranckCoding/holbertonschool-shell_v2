@@ -9,8 +9,10 @@
 */
 void _chooseExecProcess(shellData *datas, int size_test)
 {
-	int path_exec = 1, env_exec = 1;
 	struct stat st;
+
+	datas->envExecuted = 0;
+	datas->pathExecuted = 0;
 
 	if (datas->buffer != NULL && datas->args != NULL && size_test == 0)
 	{
@@ -19,19 +21,19 @@ void _chooseExecProcess(shellData *datas, int size_test)
 		{
 			if ((_strcmp(datas->args[0], "env") == 0 ||
 				_strcmp(datas->args[0], "printenv") == 0))
-				env_exec = _printenv(datas->env, datas->args);
-
-			if (datas->args[0][0] != '.' && env_exec != 0)
-				path_exec = test_with_path(datas);
+				_printenv(datas);
 
 			if (_strcmp(datas->args[0], "exit") == 0)
 				exit_procedure(datas);
 
-			if (datas->buffer != NULL && path_exec == 1
+			if (datas->args[0][0] != '.' && datas->envExecuted != 1)
+				test_with_path(datas);
+
+			if (datas->buffer != NULL && datas->pathExecuted == 0
 				&& stat(datas->args[0], &st) == 0)
 				datas->status = _execute(datas->args[0], datas);
 
-			else if (datas->buffer != NULL && path_exec == 1 && env_exec == 1)
+			else if (datas->buffer != NULL && datas->pathExecuted == 0 && datas->envExecuted == 0)
 				datas->status = error_file(datas, 0);
 		}
 	}

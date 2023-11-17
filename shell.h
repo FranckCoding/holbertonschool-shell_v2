@@ -47,7 +47,9 @@ typedef struct linked_env
  *
  * @loopCount: The count of the shell loop
  * @path: The linked list of the Path
+ * @pathExecuted: See if path is tested correctly 0 to false and 1 otherwise
  * @env: The linked list of the env
+ * @envExecuted: See if the env built-in is executed 0 to false and 1 otherwise
  * @buffer: Buffer where the arguments passes by the user is stored
  * @args: Array of String of arguments passes by the user
  * @status: The last status of the program when error is occur
@@ -57,7 +59,9 @@ typedef struct shell_data
 {
 	int loopCount;
 	path_t *path;
+	int pathExecuted;
 	env_t *env;
+	int envExecuted;
 	char *buffer;
 	char **args;
 	int status;
@@ -99,10 +103,10 @@ void free_linked_path(path_t *head);
 path_t *create_path_variable(env_t *env);
 void last_c_linked_path(path_t *path);
 char *_strcat(char *dest, char *src);
-int test_with_path(shellData *datas);
+void test_with_path(shellData *datas);
 char *_strdup(char *str);
 
-int _printenv(env_t *env, char **sep);
+void _printenv(shellData *datas);
 env_t *create_env_variable(void);
 void free_linked_env(env_t *head);
 env_t *allocate_node_env(char *name, char *value, env_t *next);
