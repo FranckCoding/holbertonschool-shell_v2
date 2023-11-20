@@ -36,11 +36,11 @@ void _chooseExecProcess(shellData *datas, int size_test)
 			if (datas->args[0][0] != '.' && datas->envExecuted != 1)
 				test_with_path(datas);
 
-			if (datas->buffer != NULL && datas->pathExecuted == 0
+			if (datas->pathExecuted == 0
 				&& stat(datas->args[0], &st) == 0)
 				datas->status = _execute(datas->args[0], datas);
 
-			else if (datas->buffer != NULL && datas->pathExecuted == 0 && datas->envExecuted == 0)
+			else if (datas->pathExecuted == 0 && datas->envExecuted == 0)
 				datas->status = error_file(datas, FILE_NOT_FOUND);
 		}
 	}
