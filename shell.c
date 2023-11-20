@@ -9,30 +9,39 @@
 */
 void _chooseExecProcess(shellData *datas, int size_test)
 {
-	int path_exec = 1, env_exec = 1;
+	builtIn builtFunction[] = {
+							{"env", _printenv},
+							{"printenv", _printenv},
+							{"exit", exit_procedure},
+							{NULL, NULL}
+	};
 	struct stat st;
+	int indexBuilt = 0;
+
+	datas->envExecuted = 0;
+	datas->pathExecuted = 0;
 
 	if (datas->buffer != NULL && datas->args != NULL && size_test == 0)
 	{
 		if ((datas->args[0][0] == '.' && datas->args[0][1] != '\0')
 			|| datas->args[0][0] != '.')
 		{
-			if ((_strcmp(datas->args[0], "env") == 0 ||
-				_strcmp(datas->args[0], "printenv") == 0))
-				env_exec = _printenv(datas->env, datas->args);
+			while (builtFunction[indexBuilt].command)
+			{
+				if (_strcmp(builtFunction[indexBuilt].command, datas->args[0]) == 0)
+					builtFunction[indexBuilt].function(datas);
+				indexBuilt++;
+			}
 
-			if (datas->args[0][0] != '.' && env_exec != 0)
-				path_exec = test_with_path(datas);
+			if (datas->args[0][0] != '.' && datas->envExecuted != 1)
+				test_with_path(datas);
 
-			if (_strcmp(datas->args[0], "exit") == 0)
-				exit_procedure(datas);
-
-			if (datas->buffer != NULL && path_exec == 1
+			if (_strcmp("..", datas->args[0]) && datas->pathExecuted == 0
 				&& stat(datas->args[0], &st) == 0)
 				datas->status = _execute(datas->args[0], datas);
 
-			else if (datas->buffer != NULL && path_exec == 1 && env_exec == 1)
-				datas->status = error_file(datas, 0);
+			else if (datas->pathExecuted == 0 && datas->envExecuted == 0)
+				datas->status = error_file(datas, FILE_NOT_FOUND);
 		}
 	}
 }
@@ -58,7 +67,7 @@ void loop_asking(shellData *datas)
 		datas->args = separate_av(datas->buffer, " \t\n\v\r\f");
 		if (datas->args != NULL && _strlen(datas->args[0]) > 255)
 		{
-			datas->status = error_file(datas, 1);
+			datas->status = error_file(datas, FILE_NAME_LONG);
 			size_test = 1;
 		}
 
@@ -89,8 +98,8 @@ int _execute(char *cmd, shellData *datas)
 	pid_t child_pid;
 	int status;
 
-	if ((cmd[0] == '.' && cmd[1] == '.' && cmd[3] == '\0') || access(cmd, X_OK))
-		return (error_file(datas, 2));
+	if (access(cmd, X_OK))
+		return (error_file(datas, PERM_DENIED));
 
 	child_pid = fork();
 	if (child_pid == -1)
