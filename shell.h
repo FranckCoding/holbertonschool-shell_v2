@@ -13,6 +13,11 @@
 
 extern char **environ;
 
+/* Macros for error_file */
+#define FILE_NOT_FOUND 0
+#define FILE_NAME_LONG 1
+#define PERM_DENIED 2
+
 /**
  * struct linked_path - Do a linked list for environment variable PATH
  *

@@ -41,7 +41,7 @@ void _chooseExecProcess(shellData *datas, int size_test)
 				datas->status = _execute(datas->args[0], datas);
 
 			else if (datas->buffer != NULL && datas->pathExecuted == 0 && datas->envExecuted == 0)
-				datas->status = error_file(datas, 0);
+				datas->status = error_file(datas, FILE_NOT_FOUND);
 		}
 	}
 }
@@ -67,7 +67,7 @@ void loop_asking(shellData *datas)
 		datas->args = separate_av(datas->buffer, " \t\n\v\r\f");
 		if (datas->args != NULL && _strlen(datas->args[0]) > 255)
 		{
-			datas->status = error_file(datas, 1);
+			datas->status = error_file(datas, FILE_NAME_LONG);
 			size_test = 1;
 		}
 
@@ -99,7 +99,7 @@ int _execute(char *cmd, shellData *datas)
 	int status;
 
 	if ((cmd[0] == '.' && cmd[1] == '.' && cmd[3] == '\0') || access(cmd, X_OK))
-		return (error_file(datas, 2));
+		return (error_file(datas, PERM_DENIED));
 
 	child_pid = fork();
 	if (child_pid == -1)
