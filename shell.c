@@ -36,7 +36,7 @@ void _chooseExecProcess(shellData *datas, int size_test)
 			if (datas->args[0][0] != '.' && datas->envExecuted != 1)
 				test_with_path(datas);
 
-			if (datas->pathExecuted == 0
+			if (_strcmp("..", datas->args[0]) && datas->pathExecuted == 0
 				&& stat(datas->args[0], &st) == 0)
 				datas->status = _execute(datas->args[0], datas);
 
@@ -98,7 +98,7 @@ int _execute(char *cmd, shellData *datas)
 	pid_t child_pid;
 	int status;
 
-	if ((cmd[0] == '.' && cmd[1] == '.' && cmd[3] == '\0') || access(cmd, X_OK))
+	if (access(cmd, X_OK))
 		return (error_file(datas, PERM_DENIED));
 
 	child_pid = fork();
