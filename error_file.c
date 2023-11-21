@@ -24,3 +24,22 @@ int error_file(shellData *shellData, int nerr)
 
 	return (-EKEYEXPIRED);
 }
+
+/**
+ * error_arguments - handle error when argument is wrong
+ *
+ * @shellData: Structure with all data of the shell
+ * @nerr: The number of the error occured:
+ * 0 for numeric argument required
+ *
+ * Return: EKEYEXPIRED
+ */
+int error_arguments(shellData *shellData, int nerr)
+{
+	char *merr[1] = {	": numeric argument required\n"};
+
+	fprintf(stderr, "%s: %d: %s: %s%s", shellData->argv[0], shellData->loopCount,
+			 shellData->args[0], shellData->args[1], merr[nerr]);
+
+	return (2);
+}

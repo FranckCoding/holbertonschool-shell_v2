@@ -12,7 +12,7 @@ void _chooseExecProcess(shellData *datas, int size_test)
 	builtIn builtFunction[] = {
 							{"env", _printenv},
 							{"printenv", _printenv},
-							{"exit", exit_procedure},
+							{"exit", exitBuiltIn},
 							{NULL, NULL}
 	};
 	struct stat st;
