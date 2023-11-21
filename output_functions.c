@@ -73,32 +73,6 @@ void exit_procedure(shellData *datas)
 }
 
 /**
- * _printenv - Print all environment variables
- *
- * @datas:The pointer with all the data of the shell
- *
- */
-void _printenv(shellData *datas)
-{
-	env_t *env = datas->env;
-
-	while (env != NULL)
-	{
-		_puts(env->name);
-		_puts("=");
-
-		if (env->value != NULL)
-			_puts(env->value);
-
-		_putchar('\n');
-
-		env = env->next;
-	}
-
-	datas->envExecuted = 1;
-}
-
-/**
  * sigint_handle - Handle the CTRL+D signal
  * print a new line and a new prompt
  *

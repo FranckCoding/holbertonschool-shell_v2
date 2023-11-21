@@ -18,6 +18,9 @@ extern char **environ;
 #define FILE_NAME_LONG 1
 #define PERM_DENIED 2
 
+/* Macros for error_arguments */
+#define NUMERIC_ARG_ISSUE 0
+
 /**
  * struct linked_path - Do a linked list for environment variable PATH
  *
@@ -111,6 +114,7 @@ void _prompt(void);
 char *_getline(shellData *datas);
 
 int error_file(shellData *datas, int nerr);
+int error_arguments(shellData *shellData, int nerr);
 
 path_t *add_path_node(path_t *head, char *value);
 path_t *allocate_node(char *value, path_t *next);
@@ -123,7 +127,9 @@ char *_strcat(char *dest, char *src);
 void test_with_path(shellData *datas);
 char *_strdup(char *str);
 
+void exitBuiltIn(shellData *datas);
 void _printenv(shellData *datas);
+
 env_t *create_env_variable(void);
 void free_linked_env(env_t *head);
 env_t *allocate_node_env(char *name, char *value, env_t *next);
@@ -131,5 +137,8 @@ env_t *add_env_node(env_t *head, char *name, char *value);
 
 void exit_procedure(shellData *datas);
 void sigint_handle(__attribute__((unused))int i);
+
+int _atoi(const char *str);
+int _isNumber(const char *str);
 
 #endif
