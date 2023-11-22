@@ -36,10 +36,14 @@ int error_file(shellData *shellData, int nerr)
  */
 int error_arguments(shellData *shellData, int nerr)
 {
-	char *merr[1] = {	": numeric argument required\n"};
+	char *merr[] = {	": numeric argument required\n",
+						": No such file or directory\n",
+						": Permission denied\n",
+						" not set\n"
+	};
 
 	fprintf(stderr, "%s: %d: %s: %s%s", shellData->argv[0], shellData->loopCount,
 			 shellData->args[0], shellData->args[1], merr[nerr]);
 
-	return (2);
+	return (1);
 }

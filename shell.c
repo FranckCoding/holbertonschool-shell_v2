@@ -13,12 +13,13 @@ void _chooseExecProcess(shellData *datas, int size_test)
 							{"env", _printenv},
 							{"printenv", _printenv},
 							{"exit", exitBuiltIn},
+							{"cd", cdBuiltInCommand},
 							{NULL, NULL}
 	};
 	struct stat st;
 	int indexBuilt = 0;
 
-	datas->envExecuted = 0;
+	datas->builtinExecuted = 0;
 	datas->pathExecuted = 0;
 
 	if (datas->buffer != NULL && datas->args != NULL && size_test == 0)
@@ -33,14 +34,14 @@ void _chooseExecProcess(shellData *datas, int size_test)
 				indexBuilt++;
 			}
 
-			if (datas->args[0][0] != '.' && datas->envExecuted != 1)
+			if (datas->args[0][0] != '.' && datas->builtinExecuted != 1)
 				test_with_path(datas);
 
 			if (_strcmp("..", datas->args[0]) && datas->pathExecuted == 0
 				&& stat(datas->args[0], &st) == 0)
 				datas->status = _execute(datas->args[0], datas);
 
-			else if (datas->pathExecuted == 0 && datas->envExecuted == 0)
+			else if (datas->pathExecuted == 0 && datas->builtinExecuted == 0)
 				datas->status = error_file(datas, FILE_NOT_FOUND);
 		}
 	}
@@ -140,6 +141,7 @@ shellData *_shellDataInitialisation(char *argv[])
 	datas->buffer = NULL;
 	datas->args = NULL;
 	datas->status = 0;
+	datas->oldPwd = NULL;
 
 	return (datas);
 }

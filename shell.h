@@ -20,6 +20,8 @@ extern char **environ;
 
 /* Macros for error_arguments */
 #define NUMERIC_ARG_ISSUE 0
+#define NO_FILE_OR_DIR 1
+#define ENV_NOT_SET 3
 
 /**
  * struct linked_path - Do a linked list for environment variable PATH
@@ -57,11 +59,13 @@ typedef struct linked_env
  * @path: The linked list of the Path
  * @pathExecuted: See if path is tested correctly 0 to false and 1 otherwise
  * @env: The linked list of the env
- * @envExecuted: See if the env built-in is executed 0 to false and 1 otherwise
+ * @builtinExecuted: See if a built-in function is executed
+ * 0 to false and 1 otherwise
  * @buffer: Buffer where the arguments passes by the user is stored
  * @args: Array of String of arguments passes by the user
  * @status: The last status of the program when error is occur
  * @argv: All arguments passes at the launch of the program
+ * @oldPwd: The previous directory
 */
 typedef struct shell_data
 {
@@ -69,11 +73,12 @@ typedef struct shell_data
 	path_t *path;
 	int pathExecuted;
 	env_t *env;
-	int envExecuted;
+	int builtinExecuted;
 	char *buffer;
 	char **args;
 	int status;
 	char **argv;
+	char *oldPwd;
 } shellData;
 
 /**
@@ -127,8 +132,9 @@ char *_strcat(char *dest, char *src);
 void test_with_path(shellData *datas);
 char *_strdup(char *str);
 
-void exitBuiltIn(shellData *datas);
 void _printenv(shellData *datas);
+void exitBuiltIn(shellData *datas);
+void cdBuiltInCommand(shellData *datas);
 
 env_t *create_env_variable(void);
 void free_linked_env(env_t *head);
