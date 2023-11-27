@@ -13,15 +13,48 @@
 
 extern char **environ;
 
-/* Macros for error_file */
-#define FILE_NOT_FOUND 0
-#define FILE_NAME_LONG 1
-#define PERM_DENIED 2
+/**
+ * enum ErrorFile -		Enumeration to represent error cases related to
+ *						file/command passes at argument in the shell
+ *
+ * @FILE_NOT_FOUND:	Indicates that the specified command was not found
+ *						This error typically occurs when attempting to pass unknow
+ *						argument.
+ *
+ * @FILE_NAME_LONG:		Indicates that the file name provided is too long.
+ *						This error may occur if the length of the file name
+ *						exceeds system limits.
+ *
+ * @PERM_DENIED:		Indicates a permission denied error.
+ *						This error occurs when the program does not have the
+ *						necessary permission to open or access the specified file
+ *
+ */
+enum ErrorFile
+{
+	FILE_NOT_FOUND,
+	FILE_NAME_LONG,
+	PERM_DENIED
+};
 
-/* Macros for error_arguments */
-#define NUMERIC_ARG_ISSUE 0
-#define NO_FILE_OR_DIR 1
-#define ENV_NOT_SET 3
+/**
+ * enum ErrorArg -		Enumeration to represent error cases related to
+ *						arguments commands passes in the shell
+ *
+ * @NUMERIC_ARG_ISSUE:	Indicates the arguments passes for a built-in function
+ *						is not a numeric argument. This error occur when the
+ *						passes is not an Int.
+ *
+ * @NO_FILE_OR_DIR:		Indicates the argument
+ *
+ * @ENV_NOT_SET:		Indicates that one environment is not set
+ */
+enum ErrorArg
+{
+	NUMERIC_ARG_ISSUE,
+	NO_FILE_OR_DIR,
+	ENV_NOT_SET = 4
+};
 
 /**
  * struct linked_path - Do a linked list for environment variable PATH
