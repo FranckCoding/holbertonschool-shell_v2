@@ -5,9 +5,8 @@
  * the correct command
  *
  * @datas: The pointer with all datas of the shell
- * @size_test: Test if the size of the arguments passes is not over 255 char
 */
-void _chooseExecProcess(shellData *datas, int size_test)
+void _chooseExecProcess(shellData *datas)
 {
 	builtIn builtFunction[] = {
 							{"env", _printenv},
@@ -22,7 +21,7 @@ void _chooseExecProcess(shellData *datas, int size_test)
 	datas->builtinExecuted = 0;
 	datas->pathExecuted = 0;
 
-	if (datas->buffer != NULL && datas->args != NULL && size_test == 0)
+	if (datas->buffer != NULL && datas->args != NULL)
 	{
 		if ((datas->args[0][0] == '.' && datas->args[0][1] != '\0')
 			|| datas->args[0][0] != '.')
@@ -56,8 +55,6 @@ void _chooseExecProcess(shellData *datas, int size_test)
  */
 void loop_asking(shellData *datas)
 {
-	int size_test = 0;
-
 	do {
 		datas->loopCount++;
 
@@ -66,13 +63,8 @@ void loop_asking(shellData *datas)
 		datas->buffer = _getline(datas);
 
 		datas->args = separate_av(datas->buffer, " \t\n\v\r\f");
-		if (datas->args != NULL && _strlen(datas->args[0]) > 255)
-		{
-			datas->status = error_file(datas, FILE_NAME_LONG);
-			size_test = 1;
-		}
 
-		_chooseExecProcess(datas, size_test);
+		_chooseExecProcess(datas);
 
 		if (datas->args != NULL)
 		{
@@ -82,7 +74,6 @@ void loop_asking(shellData *datas)
 
 		free(datas->buffer);
 		datas->buffer = NULL;
-		size_test = 0;
 	} while (1);
 }
 

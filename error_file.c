@@ -16,7 +16,6 @@
 int error_file(shellData *datas, int nerr)
 {
 	char *merr[3] = {	": not found\n",
-						": File name too long\n",
 						": Permission denied\n"};
 
 	fprintf(stderr, "%s: %d: %s%s", datas->argv[0], datas->loopCount,
@@ -37,8 +36,9 @@ int error_file(shellData *datas, int nerr)
 int error_arguments(shellData *shellData, int nerr)
 {
 	char *merr[] = {	": numeric argument required\n",
-						": No such file or directory\n",
 						": Permission denied\n",
+						": No such file or directory\n",
+						": File name too long\n",
 						" not set\n",
 						": Not a directory\n"
 	};

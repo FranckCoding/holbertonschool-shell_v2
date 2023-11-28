@@ -21,9 +21,6 @@ extern char **environ;
  *						This error typically occurs when attempting to pass unknow
  *						argument.
  *
- * @FILE_NAME_LONG:		Indicates that the file name provided is too long.
- *						This error may occur if the length of the file name
- *						exceeds system limits.
  *
  * @PERM_DENIED:		Indicates a permission denied error.
  *						This error occurs when the program does not have the
@@ -33,7 +30,6 @@ extern char **environ;
 enum ErrorFile
 {
 	FILE_NOT_FOUND,
-	FILE_NAME_LONG,
 	PERM_DENIED
 };
 
@@ -49,13 +45,18 @@ enum ErrorFile
  *
  * @ENV_NOT_SET:		Indicates that one environment is not set
  *
+ * @FILE_NAME_LONG:		Indicates that the file name provided is too long.
+ *						This error may occur if the length of the file name
+ *						exceeds system limits.
+ *
  * @NOT_A_DIR:			Indicates that argument is not a directory
  */
 enum ErrorArg
 {
 	NUMERIC_ARG_ISSUE,
-	NO_FILE_OR_DIR,
-	ENV_NOT_SET = 3,
+	NO_FILE_OR_DIR = 2,
+	FILE_NAME_LONG,
+	ENV_NOT_SET,
 	NOT_A_DIR
 };
 
@@ -132,6 +133,7 @@ typedef struct built_in_function_pointer
 
 /* Functions in shell.c */
 void loop_asking(shellData *datas);
+void _chooseExecProcess(shellData *datas);
 int _execute(char *cmd, shellData *datas);
 shellData *_shellDataInitialisation(char *argv[]);
 

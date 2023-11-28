@@ -88,6 +88,12 @@ int checkPathValidity(shellData *datas, char *path)
 {
 	struct stat st;
 
+	if (_strlen(path) > 255)
+	{
+		error_arguments(datas, FILE_NAME_LONG);
+		return (0);
+	}
+
 	if (stat(path, &st) == -1)
 	{
 		error_arguments(datas, NO_FILE_OR_DIR);
