@@ -45,15 +45,18 @@ enum ErrorFile
  *						is not a numeric argument. This error occur when the
  *						passes is not an Int.
  *
- * @NO_FILE_OR_DIR:		Indicates the argument
+ * @NO_FILE_OR_DIR:		Indicates the argument is not a file or directory
  *
  * @ENV_NOT_SET:		Indicates that one environment is not set
+ *
+ * @NOT_A_DIR:			Indicates that argument is not a directory
  */
 enum ErrorArg
 {
 	NUMERIC_ARG_ISSUE,
 	NO_FILE_OR_DIR,
-	ENV_NOT_SET = 4
+	ENV_NOT_SET = 3,
+	NOT_A_DIR
 };
 
 /**
