@@ -37,7 +37,7 @@ void _chooseExecProcess(shellData *datas)
 				test_with_path(datas);
 
 			if (_strcmp("..", datas->args[0]) && datas->pathExecuted == 0
-				&& stat(datas->args[0], &st) == 0)
+				&& stat(datas->args[0], &st) == 0 && datas->args[0][0] == '/')
 				datas->status = _execute(datas->args[0], datas);
 
 			else if (datas->pathExecuted == 0 && datas->builtinExecuted == 0)
