@@ -99,6 +99,7 @@ typedef struct linked_env
  * @builtinExecuted: See if a built-in function is executed
  * 0 to false and 1 otherwise
  * @buffer: Buffer where the arguments passes by the user is stored
+ * @charactersGet: Number of characters get in the getline function
  * @args: Array of String of arguments passes by the user
  * @status: The last status of the program when error is occur
  * @argv: All arguments passes at the launch of the program
@@ -112,6 +113,7 @@ typedef struct shell_data
 	env_t *env;
 	int builtinExecuted;
 	char *buffer;
+	ssize_t charactersGet;
 	char **args;
 	int status;
 	char **argv;

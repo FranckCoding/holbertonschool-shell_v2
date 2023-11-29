@@ -74,6 +74,7 @@ void loop_asking(shellData *datas)
 
 		free(datas->buffer);
 		datas->buffer = NULL;
+		datas->charactersGet = 0;
 	} while (1);
 }
 
@@ -128,6 +129,7 @@ shellData *_shellDataInitialisation(char *argv[])
 	datas->env = create_env_variable();
 	datas->path = create_path_variable(datas->env);
 	datas->loopCount = 0;
+	datas->charactersGet = 0;
 	datas->argv = argv;
 	datas->buffer = NULL;
 	datas->args = NULL;
