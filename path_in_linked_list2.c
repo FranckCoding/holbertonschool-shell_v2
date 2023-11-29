@@ -76,8 +76,7 @@ void test_with_path(shellData *datas)
 	while (path != NULL)
 	{
 		lenValue = _strlen(path->value);
-		tmp_buffer = (char *)malloc(sizeof(char) * (256 + lenValue + 1));
-		*tmp_buffer = '\0';
+		tmp_buffer = _calloc((datas->charactersGet + lenValue + 2), sizeof(char));
 
 		if (path->value[lenValue - 1] != '/')
 		{
@@ -89,7 +88,6 @@ void test_with_path(shellData *datas)
 				tmp_buffer[lenValue + 1 + loop] = datas->args[0][loop];
 				loop++;
 			}
-			tmp_buffer[lenValue + 1 + loop] = '\0';
 		}
 
 		if (_strcmp(datas->args[0], "..") != 0 && stat(tmp_buffer, &st) == 0)

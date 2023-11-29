@@ -5,23 +5,23 @@
  * the correct command
  *
  * @datas: The pointer with all datas of the shell
- * @size_test: Test if the size of the arguments passes is not over 255 char
 */
-void _chooseExecProcess(shellData *datas, int size_test)
+void _chooseExecProcess(shellData *datas)
 {
 	builtIn builtFunction[] = {
 							{"env", _printenv},
 							{"printenv", _printenv},
 							{"exit", exitBuiltIn},
+							{"cd", cdBuiltInCommand},
 							{NULL, NULL}
 	};
 	struct stat st;
 	int indexBuilt = 0;
 
-	datas->envExecuted = 0;
+	datas->builtinExecuted = 0;
 	datas->pathExecuted = 0;
 
-	if (datas->buffer != NULL && datas->args != NULL && size_test == 0)
+	if (datas->buffer != NULL && datas->args != NULL)
 	{
 		if ((datas->args[0][0] == '.' && datas->args[0][1] != '\0')
 			|| datas->args[0][0] != '.')
@@ -33,14 +33,14 @@ void _chooseExecProcess(shellData *datas, int size_test)
 				indexBuilt++;
 			}
 
-			if (datas->args[0][0] != '.' && datas->envExecuted != 1)
+			if (datas->args[0][0] != '.' && datas->builtinExecuted != 1)
 				test_with_path(datas);
 
 			if (_strcmp("..", datas->args[0]) && datas->pathExecuted == 0
-				&& stat(datas->args[0], &st) == 0)
+				&& stat(datas->args[0], &st) == 0 && datas->args[0][0] == '/')
 				datas->status = _execute(datas->args[0], datas);
 
-			else if (datas->pathExecuted == 0 && datas->envExecuted == 0)
+			else if (datas->pathExecuted == 0 && datas->builtinExecuted == 0)
 				datas->status = error_file(datas, FILE_NOT_FOUND);
 		}
 	}
@@ -55,8 +55,6 @@ void _chooseExecProcess(shellData *datas, int size_test)
  */
 void loop_asking(shellData *datas)
 {
-	int size_test = 0;
-
 	do {
 		datas->loopCount++;
 
@@ -65,13 +63,8 @@ void loop_asking(shellData *datas)
 		datas->buffer = _getline(datas);
 
 		datas->args = separate_av(datas->buffer, " \t\n\v\r\f");
-		if (datas->args != NULL && _strlen(datas->args[0]) > 255)
-		{
-			datas->status = error_file(datas, FILE_NAME_LONG);
-			size_test = 1;
-		}
 
-		_chooseExecProcess(datas, size_test);
+		_chooseExecProcess(datas);
 
 		if (datas->args != NULL)
 		{
@@ -81,7 +74,7 @@ void loop_asking(shellData *datas)
 
 		free(datas->buffer);
 		datas->buffer = NULL;
-		size_test = 0;
+		datas->charactersGet = 0;
 	} while (1);
 }
 
@@ -136,10 +129,12 @@ shellData *_shellDataInitialisation(char *argv[])
 	datas->env = create_env_variable();
 	datas->path = create_path_variable(datas->env);
 	datas->loopCount = 0;
+	datas->charactersGet = 0;
 	datas->argv = argv;
 	datas->buffer = NULL;
 	datas->args = NULL;
 	datas->status = 0;
+	datas->oldPwd = NULL;
 
 	return (datas);
 }

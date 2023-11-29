@@ -36,7 +36,7 @@ char *_getline(shellData *datas)
 	}
 
 	buffer[charactersGet - 1] = '\0';
-	charactersGet -= 1;
+	datas->charactersGet = charactersGet--;
 
 	if (charactersGet == 0)
 	{

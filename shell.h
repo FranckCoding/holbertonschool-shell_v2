@@ -13,13 +13,52 @@
 
 extern char **environ;
 
-/* Macros for error_file */
-#define FILE_NOT_FOUND 0
-#define FILE_NAME_LONG 1
-#define PERM_DENIED 2
+/**
+ * enum ErrorFile -		Enumeration to represent error cases related to
+ *						file/command passes at argument in the shell
+ *
+ * @FILE_NOT_FOUND:	Indicates that the specified command was not found
+ *						This error typically occurs when attempting to pass unknow
+ *						argument.
+ *
+ *
+ * @PERM_DENIED:		Indicates a permission denied error.
+ *						This error occurs when the program does not have the
+ *						necessary permission to open or access the specified file
+ *
+ */
+enum ErrorFile
+{
+	FILE_NOT_FOUND,
+	PERM_DENIED
+};
 
-/* Macros for error_arguments */
-#define NUMERIC_ARG_ISSUE 0
+/**
+ * enum ErrorArg -		Enumeration to represent error cases related to
+ *						arguments commands passes in the shell
+ *
+ * @NUMERIC_ARG_ISSUE:	Indicates the arguments passes for a built-in function
+ *						is not a numeric argument. This error occur when the
+ *						passes is not an Int.
+ *
+ * @NO_FILE_OR_DIR:		Indicates the argument is not a file or directory
+ *
+ * @ENV_NOT_SET:		Indicates that one environment is not set
+ *
+ * @FILE_NAME_LONG:		Indicates that the file name provided is too long.
+ *						This error may occur if the length of the file name
+ *						exceeds system limits.
+ *
+ * @NOT_A_DIR:			Indicates that argument is not a directory
+ */
+enum ErrorArg
+{
+	NUMERIC_ARG_ISSUE,
+	NO_FILE_OR_DIR = 2,
+	FILE_NAME_LONG,
+	ENV_NOT_SET,
+	NOT_A_DIR
+};
 
 /**
  * struct linked_path - Do a linked list for environment variable PATH
@@ -57,11 +96,14 @@ typedef struct linked_env
  * @path: The linked list of the Path
  * @pathExecuted: See if path is tested correctly 0 to false and 1 otherwise
  * @env: The linked list of the env
- * @envExecuted: See if the env built-in is executed 0 to false and 1 otherwise
+ * @builtinExecuted: See if a built-in function is executed
+ * 0 to false and 1 otherwise
  * @buffer: Buffer where the arguments passes by the user is stored
+ * @charactersGet: Number of characters get in the getline function
  * @args: Array of String of arguments passes by the user
  * @status: The last status of the program when error is occur
  * @argv: All arguments passes at the launch of the program
+ * @oldPwd: The previous directory
 */
 typedef struct shell_data
 {
@@ -69,11 +111,13 @@ typedef struct shell_data
 	path_t *path;
 	int pathExecuted;
 	env_t *env;
-	int envExecuted;
+	int builtinExecuted;
 	char *buffer;
+	ssize_t charactersGet;
 	char **args;
 	int status;
 	char **argv;
+	char *oldPwd;
 } shellData;
 
 /**
@@ -91,6 +135,7 @@ typedef struct built_in_function_pointer
 
 /* Functions in shell.c */
 void loop_asking(shellData *datas);
+void _chooseExecProcess(shellData *datas);
 int _execute(char *cmd, shellData *datas);
 shellData *_shellDataInitialisation(char *argv[]);
 
@@ -127,8 +172,9 @@ char *_strcat(char *dest, char *src);
 void test_with_path(shellData *datas);
 char *_strdup(char *str);
 
-void exitBuiltIn(shellData *datas);
 void _printenv(shellData *datas);
+void exitBuiltIn(shellData *datas);
+void cdBuiltInCommand(shellData *datas);
 
 env_t *create_env_variable(void);
 void free_linked_env(env_t *head);
