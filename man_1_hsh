@@ -1,5 +1,5 @@
 ./" This is the manpage of the shell program in the project of Holberton School
-.TH SIMPLE_SHELL 1 2021-07-12 GNU
+.TH SHELL V2 1 2023-11-07 GNU
 
 .SH NAME
 	hsh — shell, the standard command language interpreter
@@ -18,14 +18,23 @@ input, or a specified file.
 	The following environment variables shall affect the execution of sh:
 
 	HOME	Assigned auto at startup with the user's name. it is a default variable argument
+
 	CDPATH	It looks exactly like the PATH variable containing with many different paths concatenated using ':'.
+
 	PS1		This variable contains the string corresponding to the prompt ($ as a rule).
+
 	PS2		This variable contains the string corresponding to the secondary prompt (> as a rule).
+
 	PS3		Environment variable which contains the value of the prompt for the select operator inside the shell script.
+
 	PS4		The PS4 shell variable defines the prompt that gets displayed, when you execute a shell script in debug mode
+
 	PWD		This variable contains the path of the current directory.
+
 	OLDPWD	This variable contains the last directory visited by the connected user
+
 	PPID	This variable contains the ID of the parent process 
+
 	PATH:	This variable contains a list of directories in which the shell looks for all commands that are executed.
 
 	The PATH environment variable is used to locate commands in the directory tree.
@@ -58,8 +67,6 @@ built-ins
 	exit : Exit program
 
 .SH AUTHORS
-	Franck Leger, Github: @Falendrac, Email: leger_franck@hotmail.fr
-
-	Lucie Delannay, Github: @Secatricia, Email: lucie.delrue04@gmail.com
+	Franck Leger, Github: @Falendrac, Email: leger_franck@protonmail.com
 
 	for Holberton school

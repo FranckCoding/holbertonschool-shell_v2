@@ -1,4 +1,4 @@
-#include "simple_shell.h"
+#include "shell.h"
 
 /**
  * _strlen - Return the length of a string
@@ -40,7 +40,7 @@ char **strtow(char *str, char __attribute__((unused))sep)
 	if (numberWords == 0)
 		return (NULL);
 
-	aled = malloc(sizeof(char *) * numberWords + 8);
+	aled = (char **)malloc(sizeof(char *) * numberWords + 8);
 	if (aled == NULL)
 		return (NULL);
 	aled[numberWords] = NULL;

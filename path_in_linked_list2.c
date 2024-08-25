@@ -1,4 +1,4 @@
-#include "simple_shell.h"
+#include "shell.h"
 
 /**
  * separate_path - Separate a string when the char ':' is present
@@ -15,7 +15,7 @@ char **separate_path(char *str)
 	length = count_word(str, ":");
 	y = strtok(str, ":");
 
-	j = malloc(sizeof(char *) * (length + 1));
+	j = (char **)malloc(sizeof(char *) * (length + 1));
 	j[length] = NULL;
 
 	while (y != NULL)
@@ -61,45 +61,42 @@ path_t *create_path_variable(env_t *env)
 /**
  * test_with_path - Test if an command exist in one path of path
  *
- * @path: The linked list path
- * @sep: The command give by the user with options
- * @argv: The argument value passes when the programm is executed
- * @i: The count of loop
+ * @datas: The data structure with all data of the shell
  *
  * Return: buffer if no command exist in path, otherwise path + command
  */
-int test_with_path(path_t *path, char **sep, char **argv, int i)
+void test_with_path(shellData *datas)
 {
 	int lenValue;
 	char *tmp_value, *tmp_buffer;
 	int loop = 0;
 	struct stat st;
+	path_t *path = datas->path;
 
 	while (path != NULL)
 	{
 		lenValue = _strlen(path->value);
-		tmp_buffer = malloc(sizeof(char) * (256 + lenValue + 1));
-		*tmp_buffer = '\0';
+		tmp_buffer = _calloc((datas->charactersGet + lenValue + 2), sizeof(char));
 
 		if (path->value[lenValue - 1] != '/')
 		{
 			tmp_value = _strdup(path->value);
 			tmp_buffer = _strcat(tmp_buffer, tmp_value);
 			tmp_buffer[lenValue] = '/';
-			while (sep[0][loop] != '\0')
+			while (datas->args[0][loop] != '\0')
 			{
-				tmp_buffer[lenValue + 1 + loop] = sep[0][loop];
+				tmp_buffer[lenValue + 1 + loop] = datas->args[0][loop];
 				loop++;
 			}
-			tmp_buffer[lenValue + 1 + loop] = '\0';
 		}
 
-		if (_strcmp(sep[0], "..") != 0 && stat(tmp_buffer, &st) == 0)
+		if (_strcmp(datas->args[0], "..") != 0 && stat(tmp_buffer, &st) == 0)
 		{
 			free(tmp_value);
-			_execute(tmp_buffer, sep, argv, i);
+			_execute(tmp_buffer, datas);
 			free(tmp_buffer);
-			return (0);
+			datas->pathExecuted = 1;
+			return;
 		}
 
 		free(tmp_value);
@@ -107,5 +104,4 @@ int test_with_path(path_t *path, char **sep, char **argv, int i)
 		path = path->next;
 		loop = 0;
 	}
-	return (1);
 }

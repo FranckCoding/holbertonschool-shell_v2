@@ -1,4 +1,4 @@
-#include "simple_shell.h"
+#include "shell.h"
 
 /**
  * add_path_node - add a new node in the linked list path
@@ -37,7 +37,7 @@ path_t *allocate_node(char *value, path_t *next)
 {
 	path_t *new;
 
-	new = malloc(sizeof(path_t));
+	new = (path_t *)malloc(sizeof(path_t));
 
 	if (new == NULL)
 		return (NULL);
